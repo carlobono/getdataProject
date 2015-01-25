@@ -2,6 +2,11 @@
 
 library(plyr)
 library(dplyr)
+rawdata <- loadMergeData()
+actdata <- attachActivityLabels(rawdata)
+labdata <- attachVariableNames(actdata)
+finaldata <- avgActivityAndSubject(labdata)
+write.table(finaldata,file="tidy.txt",row.name=FALSE)
 
 ## 1. Merges the training and the test sets to create one data set.
 ## Usage: rawdata <- loadMergeData()
@@ -57,7 +62,6 @@ attachVariableNames <- function(data) {
 ## 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 ## Usage: finaldata <- avgActivityAndSubject(labdata)
 ## I used this line for dumping the final output:
-## write.table(finaldata,file="tidy.txt",row.name=FALSE)
 avgActivityAndSubject <- function(data) {
 	# First we attach subjects
 	dt <- attachSubjects(data)
