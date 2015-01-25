@@ -2,11 +2,6 @@
 
 library(plyr)
 library(dplyr)
-rawdata <- loadMergeData()
-actdata <- attachActivityLabels(rawdata)
-labdata <- attachVariableNames(actdata)
-finaldata <- avgActivityAndSubject(labdata)
-write.table(finaldata,file="tidy.txt",row.name=FALSE)
 
 ## 1. Merges the training and the test sets to create one data set.
 ## Usage: rawdata <- loadMergeData()
@@ -47,13 +42,14 @@ attachActivityLabels <- function(data) {
 	data
 }
 
-## 4. Appropriately labels the data set with descriptive variable names.
+## 4. Appropriately label the data set with descriptive variable names.
 ## Usage: labdata <- attachVariableNames(actdata)
 attachVariableNames <- function(data) {
 	variable_lab <- read.table("UCI HAR Dataset/features.txt")
 	colnames(variable_lab) <- c("feature_id","feature")
 	labels <- c("activity")
 	labels <- c(labels, c(as.character(variable_lab$feature)))
+	# The meaning of columns with same name is unclear
 	labels <- make.unique(labels)
 	colnames(data) <- labels
 	data
@@ -81,5 +77,29 @@ attachSubjects <- function(data) {
 	dt <- cbind(subject=subjects$sub,data)
 	dt
 }
+
+# The code should have a file run_analysis.R in the main directory that can be run as long as the Samsung data is in your working directory
+if (!file.exists("UCI HAR Dataset")) {
+	if(file.exists("UCI HAR Dataset.zip")) {
+		print("Found 'UCI HAR Dataset.zip', uncompressing")
+		unzip("UCI HAR Dataset.zip")
+	}		
+	else {
+		print("Unable to find 'UCI HAR Dataset' folder nor 'UCI HAR Dataset.zip'")
+		return
+	}
+} else {
+	print("Found 'UCI HAR Dataset' folder, going on.")
+}
+
+print("Loading and merging data...")
+rawdata <- loadMergeData()
+print("Attaching activity and subject data...")
+actdata <- attachActivityLabels(rawdata)
+labdata <- attachVariableNames(actdata)
+print("Calculating means grouped by subject and activity and writing output...")
+finaldata <- avgActivityAndSubject(labdata)
+write.table(finaldata,file="tidy.txt",row.name=FALSE)
+
 
 
