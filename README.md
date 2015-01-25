@@ -7,7 +7,7 @@ The script relies on plyr and dplyr packages. It assumes the unpacked original d
 The script perform the required steps calling a sequence of actions:
 
 * 1. function loadMergeData:
-load the raw data and merde train and test sets
+load the raw data and merge train and test sets
 
 * 2. function attachActivityLabels:
 loads the activity factor names in the same order, and attaches them to the previous data
@@ -20,7 +20,7 @@ since it's unclear whether same column name implies a different observation, mak
 groups data by subject and activity  and calculates means, as requested (using summarise_each)
 finaldata <- avgActivityAndSubject(labdata)
 
-finally the grouped data is saved with
+Finally the grouped data is saved with
 write.table(finaldata,file="tidy.txt",row.name=FALSE)
 
 * Should be noted that, for achieving point 2 (Extracts only the measurements on the mean and standard deviation for each measurement)
